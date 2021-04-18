@@ -1,12 +1,12 @@
 {
   "name": "cart-lib",
   "version": "1.0.0",
-  "description": "",
+  "description": "Prototype shopping cart library",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Rigo Gonzalez <rigognzlz@gmail.com",
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.21",
