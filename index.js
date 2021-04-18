@@ -81,4 +81,17 @@ export default class Cart {
 		}
 	}
 
+	removeProduct(product) {
+		let self = this;
+		let productExist = _.find(self.cartContents.rows, {id: product.id});
+		if(productExist){
+			return self.db.remove(product).then(function(r) {
+				return true;
+			}).catch(function(err) {
+				console.log(err);
+				return false;
+			});
+		}
+	}
+
 }
