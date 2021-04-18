@@ -5,6 +5,8 @@ export default class Cart {
 	constructor(db){
 		this.cartContents = {};
 	 	this.db = new PouchDB(db);
+
+		this.getCart();
 	}
 
 	getCart() {
@@ -20,6 +22,7 @@ export default class Cart {
 		}).then(function(response){
 				docs.total_rows = response.total_rows;
 				for(let d = 0; d < response.rows.length; d++){
+					if(response.rows[d].doc){
 						docs.rows.push(response.rows[d].doc)
 
 						let quantity = parseInt(response.rows[d].doc['quantity']);
@@ -28,6 +31,8 @@ export default class Cart {
 
 						docs.total_quantity += quantity;
 						docs.total_value += price * quantity;
+					}
+
 				}
 				self.cartContents = docs;
 				return docs;
@@ -38,4 +43,27 @@ export default class Cart {
 			return false;
 		});
 	}
+
+	addToCart(product) {
+		let self = this;
+		let productExist = _.find(self.cartContents.rows, {id: product.id});
+		if(!productExist){
+			return this.db.post(product).then(function() {
+				return true;
+			}).catch(function(err) {
+				console.log(err);
+				return false;
+			});
+		}else{
+			let updatedProduct = productExist;
+			updatedProduct.quantity += product.quantity;
+			return self.db.put(updatedProduct).then(function(r) {
+				return true;
+			}).catch(function(err) {
+				console.log(err);
+				return false;
+			});
+		}
+	}
+
 }
