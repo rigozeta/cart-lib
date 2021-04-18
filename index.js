@@ -66,4 +66,19 @@ export default class Cart {
 		}
 	}
 
+	updateCart(product) {
+		let self = this;
+		let productExist = _.find(self.cartContents.rows, {id: product.id});
+		if(productExist){
+			let updatedProduct = productExist;
+			updatedProduct.quantity = product.quantity;
+			return self.db.put(updatedProduct).then(function(r) {
+				return true;
+			}).catch(function(err) {
+				console.log(err);
+				return false;
+			});
+		}
+	}
+
 }
